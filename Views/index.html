@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <link rel="stylesheet" href="index.css">
+    
+    
+</head>
+<body>
+    
+   
+    <div class="formuler">
+        <div  id="messageContainer"></div>
+        <div>
+            <input type="text" name="message" id="messageinput" placeholder="Type your message">
+            <input type="button" id="messagebutton" onclick="onSend()" value="Send">
+        </div>
+    </div>
+    
+
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        var socket = window.io();
+        var msgInput = document.getElementById('messageinput');
+        var msgContainer = document.getElementById('messageContainer');
+
+      
+        var isMe =false;
+        function onSend() {
+            var msg = msgInput.value ;
+            socket.emit('onSendMessage' , {msg});
+            msgInput.value ='';
+            isMe =true;
+
+        }
+
+        socket.on('onSendMessage', ({msg}) => {
+            if(isMe ==true)
+            {
+                
+            
+                msgContainer.style.alignItems = 'flex-end';
+                isMe==false;
+            }
+            else if( isMe ==false)
+            {
+              
+                msgContainer.style.alignItems = 'flex-start'
+            }msgContainer.innerHTML +=  `<p style=" border-radius: 5px;width: min-content; margin: 10px ;padding: 10px; color: white; background-color:rgb(108, 53, 236) ; font-size: 16px;">${msg}</p>` ;
+        })
+
+
+
+    </script>
+</body>
+</html>
